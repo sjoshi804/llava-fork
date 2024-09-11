@@ -37,3 +37,7 @@ build/
 **/__pycache__
 
 **.pt
+
+downloaded_datasets
+generated_data
+ref_images
