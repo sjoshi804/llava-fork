@@ -1,13 +1,7 @@
-#!/bin/bash
-
-TRAIN_DATA_PATH=/home/t-sijoshi/multimodal-data-gen/downloaded_datasets/chartqa-train/data.json
-RUN_ID=1_train_iid_7b
-
-deepspeed llava/train/train_mem.py \
-    --deepspeed ./scripts/zero3.json \
+python llava/train/compute_grads.py \
     --model_name_or_path liuhaotian/llava-v1.5-7b \
-    --version $RUN_ID \
-    --data_path $TRAIN_DATA_PATH \
+    --version cqa_gen1 \
+    --data_path /home/t-sijoshi/multimodal-data-gen/generated_data/chartqa_train_images_20240906_final_no_explain.json \
     --image_folder ./data_images \
     --vision_tower openai/clip-vit-large-patch14-336 \
     --mm_projector_type mlp2x_gelu \
@@ -17,10 +11,10 @@ deepspeed llava/train/train_mem.py \
     --image_aspect_ratio pad \
     --group_by_modality_length True \
     --bf16 True \
-    --output_dir /home/t-sijoshi/multimodal-data-gen/output/chartqa/llava_$RUN_ID \
-    --num_train_epochs 6 \
-    --per_device_train_batch_size 16 \
-    --per_device_eval_batch_size 64 \
+    --output_dir /home/t-sijoshi/lmms-finetune/checkpoints/mathvista_new/llava_mathvista_debug \
+    --num_train_epochs 1 \
+    --per_device_train_batch_size 1 \
+    --per_device_eval_batch_size 1 \
     --gradient_accumulation_steps 1 \
     --evaluation_strategy "no" \
     --save_strategy "steps" \
@@ -35,5 +29,3 @@ deepspeed llava/train/train_mem.py \
     --model_max_length 2048 \
     --gradient_checkpointing True \
     --dataloader_num_workers 4 \
-    --lazy_preprocess True \
-    --report_to wandb

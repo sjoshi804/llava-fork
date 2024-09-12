@@ -1,7 +1,7 @@
 #!/bin/bash
 
-TRAIN_DATA_PATH=/home/t-sijoshi/multimodal-data-gen/downloaded_datasets/chartqa-train/data.json
-RUN_ID=1_train_iid_7b
+TRAIN_DATA_PATH=/home/t-sijoshi/multimodal-data-gen/skill_desc/chartqa_human.json
+RUN_ID=0_train_ref
 
 deepspeed llava/train/train_mem.py \
     --deepspeed ./scripts/zero3.json \
@@ -17,6 +17,8 @@ deepspeed llava/train/train_mem.py \
     --image_aspect_ratio pad \
     --group_by_modality_length True \
     --bf16 True \
+    --vision_lr 2e-6 \
+    --mm_projector_lr 2e-5 \
     --output_dir /home/t-sijoshi/multimodal-data-gen/output/chartqa/llava_$RUN_ID \
     --num_train_epochs 6 \
     --per_device_train_batch_size 16 \
