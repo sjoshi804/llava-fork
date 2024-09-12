@@ -967,7 +967,7 @@ def compute_grad(attn_implementation=None):
                     tokenizer=tokenizer,
                     args=training_args,
                     **data_module)
-    
+    exit(1)
     # Prune indices
     indices = torch.argsort(torch.flatten(torch.abs(model.model.layers[-1].self_attn.v_proj.weight)), descending=True)[:4096].cpu()
     
@@ -990,7 +990,7 @@ def compute_grad(attn_implementation=None):
             if torch.count_nonzero(input[0][0][i]).item() > 0:
                 representations.append(input[0][0][i])
                 return
-    # model.lm_head.register_forward_hook(save_output)
+    #model.lm_head.register_forward_hook(save_output)
     
     
     # Loop over data (eval dataloader is same data as train but not shuffled)
@@ -1001,16 +1001,12 @@ def compute_grad(attn_implementation=None):
         for key in inputs.keys():
             if type(inputs[key]) == torch.Tensor and (inputs[key].dtype == torch.float or inputs[key].dtype == torch.float16):
                 inputs[key] = inputs[key].bfloat16()
+        model.zero_grad()
         outputs = model(**inputs)
         outputs["loss"].backward()
-        i += 1
-        if i == 500:
-            break
-    print("Len gradients", len(gradients))
-    print("shape", gradients[0].shape)
-    torch.save(gradients, "gradients_ref_v_proj.pt")
+    torch.save(gradients, f"gradients_{model_args.version}_v_proj.pt")
 
-    # torch.save(representations, "representations_gen.pt")
+    #torch.save(representations, f"representations_{model_args.version}.pt")
     
 if __name__ == "__main__":
     compute_grad()
