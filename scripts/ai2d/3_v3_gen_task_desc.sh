@@ -1,7 +1,7 @@
 #!/bin/bash
 
-TRAIN_DATA_PATH=/home/t-sijoshi/multimodal-data-gen/generated_data/chartqa_train_images_20240906_final_no_explain.json
-RUN_ID=3_train_v1_iid_const_lr
+TRAIN_DATA_PATH=/home/t-sijoshi/multimodal-data-gen/generated_data/ai2d_gen_task_desc_100k_20240918_merged.json
+RUN_ID=3_v3_gen_task_desc_100k
 
 deepspeed llava/train/train_mem.py \
     --deepspeed ./scripts/zero3.json \
@@ -17,18 +17,18 @@ deepspeed llava/train/train_mem.py \
     --image_aspect_ratio pad \
     --group_by_modality_length True \
     --bf16 True \
-    --output_dir /home/t-sijoshi/multimodal-data-gen/output/chartqa/llava_$RUN_ID \
-    --num_train_epochs 2 \
+    --output_dir /home/t-sijoshi/multimodal-data-gen/output/ai2d/llava_$RUN_ID \
+    --num_train_epochs 3 \
     --per_device_train_batch_size 16 \
     --per_device_eval_batch_size 4 \
     --gradient_accumulation_steps 1 \
     --evaluation_strategy "no" \
     --save_strategy "steps" \
     --save_steps 50000 \
-    --save_total_limit 1 \
+    --save_total_limit 2 \
     --learning_rate 2e-5 \
     --weight_decay 0. \
-    --lr_scheduler_type "constant" \
+    --lr_scheduler_type "cosine" \
     --logging_steps 1 \
     --tf32 True \
     --model_max_length 2048 \

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-TRAIN_DATA_PATH=/home/t-sijoshi/multimodal-data-gen/generated_data/chartqa_train_images_20240906_final_no_explain.json
-RUN_ID=3_train_v1_iid_const_lr
+TRAIN_DATA_PATH=/home/t-sijoshi/multimodal-data-gen/generated_data/chartqa_gen_task_desc_150k_2024_09_18_merged.json
+RUN_ID=3_v3_gen_task_desc_150k
 
 deepspeed llava/train/train_mem.py \
     --deepspeed ./scripts/zero3.json \
@@ -25,10 +25,10 @@ deepspeed llava/train/train_mem.py \
     --evaluation_strategy "no" \
     --save_strategy "steps" \
     --save_steps 50000 \
-    --save_total_limit 1 \
+    --save_total_limit 2 \
     --learning_rate 2e-5 \
     --weight_decay 0. \
-    --lr_scheduler_type "constant" \
+    --lr_scheduler_type "cosine" \
     --logging_steps 1 \
     --tf32 True \
     --model_max_length 2048 \

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-TRAIN_DATA_PATH=/home/t-sijoshi/multimodal-data-gen/generated_data/chartqa_train_images_20240906_final_no_explain.json
-RUN_ID=3_train_v1_iid_const_lr
+TRAIN_DATA_PATH=/home/t-sijoshi/multimodal-data-gen/generated_data/chartqa_augmented_split_1_20240913_054311_merged.json
+RUN_ID=3_train_skill_desc_2_iid
 
 deepspeed llava/train/train_mem.py \
     --deepspeed ./scripts/zero3.json \
@@ -18,7 +18,7 @@ deepspeed llava/train/train_mem.py \
     --group_by_modality_length True \
     --bf16 True \
     --output_dir /home/t-sijoshi/multimodal-data-gen/output/chartqa/llava_$RUN_ID \
-    --num_train_epochs 2 \
+    --num_train_epochs 1 \
     --per_device_train_batch_size 16 \
     --per_device_eval_batch_size 4 \
     --gradient_accumulation_steps 1 \
@@ -28,7 +28,7 @@ deepspeed llava/train/train_mem.py \
     --save_total_limit 1 \
     --learning_rate 2e-5 \
     --weight_decay 0. \
-    --lr_scheduler_type "constant" \
+    --lr_scheduler_type "cosine" \
     --logging_steps 1 \
     --tf32 True \
     --model_max_length 2048 \
