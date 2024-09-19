@@ -1010,12 +1010,6 @@ def compute_grad(attn_implementation=None):
     model.eval()
     losses = []
     for inputs in tqdm(eval_dataloader):
-        if j <= 36:
-            i += 1
-            if i % 5000 == 0:
-                j += 1
-            continue
-            
         for key in inputs.keys():
             if type(inputs[key]) == torch.Tensor and (inputs[key].dtype == torch.float or inputs[key].dtype == torch.float16):
                 inputs[key] = inputs[key].bfloat16()
