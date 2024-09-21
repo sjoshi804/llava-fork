@@ -1022,14 +1022,15 @@ def compute_grad(attn_implementation=None):
             #torch.save(gradients, f"gradients_{model_args.version}_v_proj_{j}.pt")
             #torch.save(gradients_2, f"gradients_{model_args.version}_mm_proj_{j}.pt")
             torch.save(representations, f"/scratch/saved_representations/chartqa/representations_{model_args.version}_{j}.pt")
-            torch.save(losses, f"/scratch/saved_representations/chartqa/representations_{model_args.version}_{j}.pt")
+            torch.save(losses, f"/scratch/saved_representations/chartqa/losses_{model_args.version}_{j}.pt")
             gradients = []
             gradients_2 = []
             representations = []
+            losses = []
             j += 1
     # torch.save(gradients, f"gradients_{model_args.version}_v_proj_{j}.pt")
     # torch.save(gradients_2, f"gradients_{model_args.version}_mm_proj_{j}.pt")
     torch.save(representations, f"/scratch/saved_representations/chartqa/representations_{model_args.version}_{j}.pt")
-    torch.save(losses, f"/scratch/saved_representations/chartqa/representations_{model_args.version}_{j}.pt")
+    torch.save(losses, f"/scratch/saved_representations/chartqa/losses_{model_args.version}_{j}.pt")
 if __name__ == "__main__":
     compute_grad()
