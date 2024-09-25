@@ -211,7 +211,6 @@ pexpect==4.9.0
 pfzy==0.3.4
 pickleshare==0.7.5
 pillow==10.2.0
-pimtool @ file:///home/t-sijoshi/pimtool-main
 platformdirs==4.2.0
 portalocker==2.10.1
 pre-commit==3.8.0
