@@ -14,10 +14,10 @@ def list_dir_recursive(path, output_file):
                 f.write(f'{sub_indent}{file}\n')
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python get_dir_structure.py <path>")
+    if len(sys.argv) != 3:
+        print("Usage: python list_dir_recursive.py <input_path> <output_path>")
         sys.exit(1)
     
     path = sys.argv[1]
-    output_file = 'output_test.txt'
+    output_file = os.path.join(sys.argv[2], 'output_test.txt')
     list_dir_recursive(path, output_file)
