@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TRAIN_DATA_PATH=/home/sjoshi/llava-fork/test_data/data.json
+TRAIN_DATA_PATH=test_data/data.json
 RUN_ID=0_test_run 
 
 deepspeed llava/train/train_mem.py \
