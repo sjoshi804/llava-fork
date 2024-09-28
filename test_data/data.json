@@ -1,0 +1,186 @@
+{
+   "image_folder": "test_data/images",
+   "len_samples": 149960,
+   "samples": [
+      {
+         "id": 0,
+         "image_1": "test.jpg",
+         "conversations": [
+            {
+               "from": "human",
+               "value": "<image> Which year had the highest number of male participants?\\nA: 2017\\nB: 2018\\nC: 2019\\nD: 2020\\nE: 2021"
+            },
+            {
+               "from": "gpt",
+               "value": "D: 2020"
+            }
+         ],
+         "icl_indices": [
+            1577
+         ],
+         "keyword": "bar chart"
+      },
+      {
+         "id": 1,
+         "image_1": "test.jpg",
+         "conversations": [
+            {
+               "from": "human",
+               "value": "<image> How many female participants were there in 2020?"
+            },
+            {
+               "from": "gpt",
+               "value": "38"
+            }
+         ],
+         "icl_indices": [
+            1577
+         ],
+         "keyword": "bar chart"
+      },
+      {
+         "id": 2,
+         "image_1": "test.jpg",
+         "conversations": [
+            {
+               "from": "human",
+               "value": "<image> For which year is the number of unknown participants the highest?\\nA: 2017\\nB: 2018\\nC: 2019\\nD: 2020\\nE: 2021"
+            },
+            {
+               "from": "gpt",
+               "value": "A: 2017"
+            }
+         ],
+         "icl_indices": [
+            1577
+         ],
+         "keyword": "bar chart"
+      },
+      {
+         "id": 3,
+         "image_1": "test.jpg",
+         "conversations": [
+            {
+               "from": "human",
+               "value": "<image> What is the total number of participants (male, female, and unknown) in 2019?"
+            },
+            {
+               "from": "gpt",
+               "value": "1004"
+            }
+         ],
+         "icl_indices": [
+            1577
+         ],
+         "keyword": "bar chart"
+      },
+      {
+         "id": 4,
+         "image_1": "test.jpg",
+         "conversations": [
+            {
+               "from": "human",
+               "value": "<image> What was the number of male participants in 2021 compared to 2017?\\nA: More\\nB: Less\\nC: The same"
+            },
+            {
+               "from": "gpt",
+               "value": "B: Less"
+            }
+         ],
+         "icl_indices": [
+            1577
+         ],
+         "keyword": "bar chart"
+      },
+      {
+         "id": 5,
+         "image_1": "test.jpg",
+         "conversations": [
+            {
+               "from": "human",
+               "value": "<image> Which company had the highest acquisition price?\\nA: Pillpack\\nB: Ring\\nC: Whole Foods\\nD: Zappos"
+            },
+            {
+               "from": "gpt",
+               "value": "C: Whole Foods"
+            }
+         ],
+         "icl_indices": [
+            1779
+         ],
+         "keyword": "bar chart"
+      },
+      {
+         "id": 6,
+         "image_1": "test.jpg",
+         "conversations": [
+            {
+               "from": "human",
+               "value": "<image> What was the acquisition price of Ring?\\nA: 1,000 million U.S. dollars\\nB: 1,800 million U.S. dollars\\nC: 2,000 million U.S. dollars\\nD: 1,300 million U.S. dollars"
+            },
+            {
+               "from": "gpt",
+               "value": "B: 1,800 million U.S. dollars"
+            }
+         ],
+         "icl_indices": [
+            1779
+         ],
+         "keyword": "bar chart"
+      },
+      {
+         "id": 7,
+         "image_1": "test.jpg",
+         "conversations": [
+            {
+               "from": "human",
+               "value": "<image> Which company was acquired for a price of 545 million U.S. dollars?\\nA: LOVEFiLM\\nB: Audible\\nC: Quidsi\\nD: Souq.com"
+            },
+            {
+               "from": "gpt",
+               "value": "C: Quidsi"
+            }
+         ],
+         "icl_indices": [
+            1779
+         ],
+         "keyword": "bar chart"
+      },
+      {
+         "id": 8,
+         "image_1": "test.jpg",
+         "conversations": [
+            {
+               "from": "human",
+               "value": "<image> How much did Amazon pay for the acquisition of Souq.com?\\nA: 580 million U.S. dollars\\nB: 300 million U.S. dollars\\nC: 775 million U.S. dollars\\nD: 370 million U.S. dollars"
+            },
+            {
+               "from": "gpt",
+               "value": "A: 580 million U.S. dollars"
+            }
+         ],
+         "icl_indices": [
+            1779
+         ],
+         "keyword": "bar chart"
+      },
+      {
+         "id": 9,
+         "image_1": "test.jpg",
+         "conversations": [
+            {
+               "from": "human",
+               "value": "<image> Out of the companies listed, which one was acquired in November 2010?\\nA: Annapurna Labs\\nB: Quidsi\\nC: Pillpack\\nD: LOVEFiLM"
+            },
+            {
+               "from": "gpt",
+               "value": "B: Quidsi"
+            }
+         ],
+         "icl_indices": [
+            1779
+         ],
+         "keyword": "bar chart"
+      }
+   ]
+}
