@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TRAIN_DATA_PATH=${{inputs.t2tinput}}/generated_data/test_data.json
+TRAIN_DATA_PATH=${{inputs.t2tdata}}/generated_data/test_data.json
 RUN_ID=0_test_run 
 
 export OUTPUT_DIR=${{inputs.t2toutput}}
