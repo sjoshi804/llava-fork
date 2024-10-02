@@ -1,5 +1,5 @@
 {
-   "image_folder": "test_data/images",
+   "image_folder": "candidate_images/clip-retrieval-test-4/",
    "len_samples": 4,
    "samples": [
       {
