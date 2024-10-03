@@ -3,7 +3,7 @@
 TRAIN_DATA_PATH=$INPUT_DIR/generated_data/test_data.json
 RUN_ID=0_test_run 
 
-python scripts/process_data.py $TRAIN_DATA_PATH $OUTPUT_DIR
+python scripts/process_data.py $TRAIN_DATA_PATH $INPUT_DIR
 
 deepspeed llava/train/train_mem.py \
     --deepspeed ./scripts/zero3.json \
