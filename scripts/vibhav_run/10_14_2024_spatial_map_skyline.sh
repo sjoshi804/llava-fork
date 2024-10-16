@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TRAIN_DATA_PATH=$INPUT_DIR/generated_data_full/spatial_map_train_15k_seed_17_visual_only.json
+TRAIN_DATA_PATH=$INPUT_DIR/generated_data/spatial_map_train_15k_seed_17_visual_only.json
 RUN_ID=spatial_map_skyline_10_14_2024 
 
 python scripts/process_data.py $TRAIN_DATA_PATH $INPUT_DIR
