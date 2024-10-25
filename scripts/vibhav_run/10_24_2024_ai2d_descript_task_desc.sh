@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TRAIN_DATA_PATH=$INPUT_DIR/generated_data/ai2d_descript_task_desc_100k.json
-RUN_ID=ai2d_descript_task_desc_10_14_2024 
+RUN_ID=ai2d_descript_task_desc_10_24_2024 
 
 python scripts/process_data.py $TRAIN_DATA_PATH $INPUT_DIR
 
