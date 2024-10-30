@@ -40,3 +40,6 @@ build/
 downloaded_datasets
 generated_data
 ref_images
+
+mminstruct_data
+loss_stats
