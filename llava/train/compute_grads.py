@@ -74,6 +74,7 @@ class DataArguments:
     is_multimodal: bool = False
     image_folder: Optional[str] = field(default=None)
     image_aspect_ratio: str = 'square'
+    save_dir: str = field(default="/home/sjoshi/loss_stats")
 
 
 @dataclass
@@ -963,66 +964,71 @@ def compute_grad(attn_implementation=None):
 
     data_module = make_supervised_data_module(tokenizer=tokenizer,
                                               data_args=data_args)
-    # Prune indices
-    indices = torch.argsort(torch.flatten(torch.abs(model.model.layers[-1].self_attn.v_proj.weight)), descending=True)[:4096].cpu()
-    indices2 = torch.argsort(torch.flatten(torch.abs(model.model.mm_projector[-1].weight)), descending=True)[:4096].cpu()
+    # # Prune indices
+    # indices = torch.argsort(torch.flatten(torch.abs(model.model.layers[-1].self_attn.v_proj.weight)), descending=True)[:4096].cpu()
+    # indices2 = torch.argsort(torch.flatten(torch.abs(model.model.mm_projector[-1].weight)), descending=True)[:4096].cpu()
     
-    gradients = []
-    def save_gradients(module, grad_input, grad_output):
-        # Assuming this layer has a single output, we access the first (and only) element of grad_output
-        gradients.append(torch.flatten(module.weight.grad.detach().cpu())[indices])
+    # gradients = []
+    # def save_gradients(module, grad_input, grad_output):
+    #     # Assuming this layer has a single output, we access the first (and only) element of grad_output
+    #     gradients.append(torch.flatten(module.weight.grad.detach().cpu())[indices])
     
-    gradients_2 = []
-    def save_gradients_2(module, grad_input, grad_output):
-        # Assuming this layer has a single output, we access the first (and only) element of grad_output
-        gradients_2.append(torch.flatten(module.weight.grad.detach().cpu())[indices2])
+    # gradients_2 = []
+    # def save_gradients_2(module, grad_input, grad_output):
+    #     # Assuming this layer has a single output, we access the first (and only) element of grad_output
+    #     gradients_2.append(torch.flatten(module.weight.grad.detach().cpu())[indices2])
     
-    target_module = model.model.layers[-1].self_attn.v_proj
-    target_module.register_full_backward_hook(save_gradients)
-    model.model.mm_projector[-1].register_full_backward_hook(save_gradients_2)
-    for param in model.parameters():
-        param.requires_grad_ = False    
-    target_module.requires_grad_ = True
-    model.model.mm_projector.requires_grad_ = True
+    # target_module = model.model.layers[-1].self_attn.v_proj
+    # target_module.register_full_backward_hook(save_gradients)
+    # model.model.mm_projector[-1].register_full_backward_hook(save_gradients_2)
+    # for param in model.parameters():
+    #     param.requires_grad_ = False    
+    # target_module.requires_grad_ = True
+    # model.model.mm_projector.requires_grad_ = True
     
-    for param in model.parameters():
-        param.requires_grad_ = False    
-    target_module.requires_grad_ = True
-    model.model.mm_projector.requires_grad_ = True
+    # for param in model.parameters():
+    #     param.requires_grad_ = False    
+    # target_module.requires_grad_ = True
+    # model.model.mm_projector.requires_grad_ = True
+
+    # representations = []
+    # # Try to determine the last meaningful token representation (not padding, should not be all zeros)
+    # def save_output(module, input, output):
+    #     for i in range(len(input[0][0]) - 1, -1, -1):
+    #         if torch.count_nonzero(input[0][0][i]).item() > 0:
+    #             representations.append(input[0][0][i].detach().cpu())
+    #             return
+    # model.lm_head.register_forward_hook(save_output)
+    
+    # Loop over data (eval dataloader is same data as train but not shuffled)
     trainer = LLaVATrainer(model=model,
                     tokenizer=tokenizer,
                     args=training_args,
                     **data_module)
     
-    representations = []
-    # Try to determine the last meaningful token representation (not padding, should not be all zeros)
-    def save_output(module, input, output):
-        for i in range(len(input[0][0]) - 1, -1, -1):
-            if torch.count_nonzero(input[0][0][i]).item() > 0:
-                representations.append(input[0][0][i].detach().cpu())
-                return
-    model.lm_head.register_forward_hook(save_output)
-    
-    # Loop over data (eval dataloader is same data as train but not shuffled)
     eval_dataloader = trainer.get_eval_dataloader()
     i = 0
     j = 0
     model.eval()
     losses = []
-    for inputs in tqdm(eval_dataloader):
+    pbar = tqdm(eval_dataloader)
+    os.makedirs(data_args.save_dir, exist_ok=True)
+    for inputs in pbar:
         for key in inputs.keys():
             if type(inputs[key]) == torch.Tensor and (inputs[key].dtype == torch.float or inputs[key].dtype == torch.float16):
                 inputs[key] = inputs[key].bfloat16()
         outputs = model(**inputs)
-        losses.append(outputs["loss"].detach().cpu())
+        curr_loss = outputs["loss"].detach().cpu()
+        pbar.set_postfix_str(f"Loss: {curr_loss.item():.3f}")
+        losses.append(curr_loss)
         #outputs["loss"].backward()
         i += 1
         
         if i % 5000 == 0:
             #torch.save(gradients, f"gradients_{model_args.version}_v_proj_{j}.pt")
             #torch.save(gradients_2, f"gradients_{model_args.version}_mm_proj_{j}.pt")
-            torch.save(representations, f"/scratch/saved_representations/chartqa/representations_{model_args.version}_{j}.pt")
-            torch.save(losses, f"/scratch/saved_representations/chartqa/losses_{model_args.version}_{j}.pt")
+            #torch.save(representations, f"/scratch/saved_representations/chartqa/representations_{model_args.version}_{j}.pt")
+            torch.save(losses, f"{data_args.save_dir}/losses_{model_args.version}_{j}.pt")
             gradients = []
             gradients_2 = []
             representations = []
@@ -1030,7 +1036,8 @@ def compute_grad(attn_implementation=None):
             j += 1
     # torch.save(gradients, f"gradients_{model_args.version}_v_proj_{j}.pt")
     # torch.save(gradients_2, f"gradients_{model_args.version}_mm_proj_{j}.pt")
-    torch.save(representations, f"/scratch/saved_representations/chartqa/representations_{model_args.version}_{j}.pt")
-    torch.save(losses, f"/scratch/saved_representations/chartqa/losses_{model_args.version}_{j}.pt")
+    #torch.save(representations, f"/scratch/saved_representations/chartqa/representations_{model_args.version}_{j}.pt")
+    torch.save(losses, f"{data_args.save_dir}/losses_{model_args.version}_{j}.pt")
+    
 if __name__ == "__main__":
     compute_grad()
