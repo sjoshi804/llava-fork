@@ -25,7 +25,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 deepspeed llava/train/train_mem.py \
     --per_device_eval_batch_size 4 \
     --gradient_accumulation_steps 1 \
     --evaluation_strategy "no" \
-    --save_strategy "epoch" \
+    --save_steps 50000 \
     --save_total_limit 1 \
     --learning_rate 2e-5 \
     --weight_decay 0. \
