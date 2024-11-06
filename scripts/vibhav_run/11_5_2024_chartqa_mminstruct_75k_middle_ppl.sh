@@ -1,9 +1,10 @@
-TRAIN_DATA_PATH=$INPUT_DIR/generated_data/spatial_map_gen_task_desc_50k_20240918_merged.json
-RUN_ID=10_30_2024_cg_spatial_map
+#!/bin/bash
 
-python scripts/process_data.py $TRAIN_DATA_PATH $INPUT_DIR
+TRAIN_DATA_PATH=/home/sjoshi/llava-fork/mminstruct_data/chartqa_mminstruct_75k_middle_ppl.json
+RUN_ID=chartqa_mminstruct_75k_middle_ppl
 
-CUDA_VISIBLE_DEVICES=0 python llava/train/compute_grads.py \
+CUDA_VISIBLE_DEVICES=0,1,2,3 deepspeed llava/train/train_mem.py \
+    --deepspeed ./scripts/zero3.json \
     --model_name_or_path liuhaotian/llava-v1.5-7b \
     --version $RUN_ID \
     --data_path $TRAIN_DATA_PATH \
@@ -16,11 +17,10 @@ CUDA_VISIBLE_DEVICES=0 python llava/train/compute_grads.py \
     --image_aspect_ratio pad \
     --group_by_modality_length True \
     --bf16 True \
-    --output_dir checkpoints \
-    --save_dir $OUTPUT_DIR/loss_stats/ \
+    --output_dir checkpoints/llava_$RUN_ID \
     --num_train_epochs 1 \
-    --per_device_train_batch_size 1 \
-    --per_device_eval_batch_size 1 \
+    --per_device_train_batch_size 16 \
+    --per_device_eval_batch_size 4 \
     --gradient_accumulation_steps 1 \
     --evaluation_strategy "no" \
     --save_strategy "steps" \
@@ -35,3 +35,6 @@ CUDA_VISIBLE_DEVICES=0 python llava/train/compute_grads.py \
     --model_max_length 2048 \
     --gradient_checkpointing True \
     --dataloader_num_workers 4 \
+    --lazy_preprocess True \
+    --report_to wandb
+
