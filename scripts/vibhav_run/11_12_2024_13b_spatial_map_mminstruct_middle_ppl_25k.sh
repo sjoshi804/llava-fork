@@ -1,13 +1,13 @@
 #!/bin/bash
 
-TRAIN_DATA_PATH=$INPUT_DIR/generated_data/spatial_map_mminstruct_high_loss_37k.json
-RUN_ID=spatial_map_mminstruct_high_loss_37k
+TRAIN_DATA_PATH=$INPUT_DIR/generated_data/spatial_map_mminstruct_middle_ppl_25k.json
+RUN_ID=13b_spatial_map_mminstruct_middle_ppl_25k
 
 python scripts/process_data.py $TRAIN_DATA_PATH $INPUT_DIR
 
 CUDA_VISIBLE_DEVICES=0,1,2,3 deepspeed llava/train/train_mem.py \
     --deepspeed ./scripts/zero3.json \
-    --model_name_or_path liuhaotian/llava-v1.5-7b \
+    --model_name_or_path liuhaotian/llava-v1.5-13b \
     --version $RUN_ID \
     --data_path $TRAIN_DATA_PATH \
     --image_folder ./data_images \
@@ -21,7 +21,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 deepspeed llava/train/train_mem.py \
     --bf16 True \
     --output_dir $OUTPUT_DIR/checkpoints/llava_$RUN_ID \
     --num_train_epochs 3 \
-    --per_device_train_batch_size 16 \
+    --per_device_train_batch_size 8 \
     --per_device_eval_batch_size 4 \
     --gradient_accumulation_steps 1 \
     --evaluation_strategy "no" \

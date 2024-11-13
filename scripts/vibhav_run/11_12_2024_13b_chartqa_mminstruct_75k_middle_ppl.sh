@@ -1,13 +1,11 @@
 #!/bin/bash
 
-TRAIN_DATA_PATH=$INPUT_DIR/generated_data/spatial_map_mminstruct_high_loss_37k.json
-RUN_ID=spatial_map_mminstruct_high_loss_37k
-
-python scripts/process_data.py $TRAIN_DATA_PATH $INPUT_DIR
+TRAIN_DATA_PATH=/home/sjoshi/llava-fork/mminstruct_data/chartqa_mminstruct_75k_middle_ppl.json
+RUN_ID=13b_chartqa_mminstruct_75k_middle_ppl
 
 CUDA_VISIBLE_DEVICES=0,1,2,3 deepspeed llava/train/train_mem.py \
     --deepspeed ./scripts/zero3.json \
-    --model_name_or_path liuhaotian/llava-v1.5-7b \
+    --model_name_or_path liuhaotian/llava-v1.5-13b \
     --version $RUN_ID \
     --data_path $TRAIN_DATA_PATH \
     --image_folder ./data_images \
@@ -19,14 +17,14 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 deepspeed llava/train/train_mem.py \
     --image_aspect_ratio pad \
     --group_by_modality_length True \
     --bf16 True \
-    --output_dir $OUTPUT_DIR/checkpoints/llava_$RUN_ID \
+    --output_dir checkpoints/llava_$RUN_ID \
     --num_train_epochs 3 \
     --per_device_train_batch_size 16 \
     --per_device_eval_batch_size 4 \
     --gradient_accumulation_steps 1 \
     --evaluation_strategy "no" \
     --save_strategy "steps" \
-    --save_steps 50000 \
+    --save_steps 75000 \
     --save_total_limit 1 \
     --learning_rate 2e-5 \
     --weight_decay 0. \
